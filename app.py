@@ -1,4 +1,3 @@
-# app.py
 from flask import Flask, render_template, request, jsonify
 from main import IrisModel
 
@@ -6,12 +5,10 @@ app = Flask(__name__)
 iris_model = IrisModel()
 class_names = ["Iris-setosa", "Iris-versicolor", "Iris-virginica"]
 
-# Serve HTML page
 @app.route("/")
 def index():
     return render_template("index.html")
 
-# Handle prediction POST requests
 @app.route("/predict", methods=["POST"])
 def predict():
     data = request.get_json()
