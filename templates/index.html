@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Iris Classifier</title>
+<link href="styles.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <div id = "header"></div>
+        <h1>Iris Flower Classifier</h1>
+    </div>
+
+    <label>Sepal Length:</label>
+    <input type="number" id="sepal_length" step="0.1"><br>
+    <label>Sepal Width:</label>
+    <input type="number" id="sepal_width" step="0.1"><br>
+    <label>Petal Length:</label>
+    <input type="number" id="petal_length" step="0.1"><br>
+    <label>Petal Width:</label>
+    <input type="number" id="petal_width" step="0.1"><br>
+    <button onclick="predict()">Predict</button>
+
+    <p id="result"></p>
+
+<script>
+async function predict() {
+    const sl = parseFloat(document.getElementById("sepal_length").value);
+    const sw = parseFloat(document.getElementById("sepal_width").value);
+    const pl = parseFloat(document.getElementById("petal_length").value);
+    const pw = parseFloat(document.getElementById("petal_width").value);
+
+    if (isNaN(sl) || isNaN(sw) || isNaN(pl) || isNaN(pw)) {
+        alert("Please enter valid numbers for all fields.");
+        return;
+    }
+
+    const response = await fetch("/predict", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ sl, sw, pl, pw })
+    });
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        document.getElementById("result").innerText = "Error: " + errorData.error;
+        return;
+    }
+
+    const data = await response.json();
+    document.getElementById("result").innerText = "Predicted class: " + data.prediction;
+}
+</script>
+</body>
+</html>
